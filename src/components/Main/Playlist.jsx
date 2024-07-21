@@ -1,13 +1,13 @@
+import React, { useEffect, useState } from "react";
+import YouTube from "react-youtube";
 import styled from "styled-components";
 import useApiRequest from "../../api/useApiRequest";
-import { useEffect, useState } from "react";
-import YouTube from "react-youtube";
 import Playlists from "./Playlists";
 
 function Playlist() {
   const [playlistItems, setPlaylistItems] = useState([]);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-
+  const [player, setPlayer] = useState(null);
   const { apiRequest } = useApiRequest();
 
   const playNextAudio = () => {
@@ -16,8 +16,27 @@ function Playlist() {
     );
   };
 
+  const onPlayerReady = (event) => {
+    setPlayer(event.target);
+    // Optional: Play video if user has already interacted with the page
+    if (player) {
+      event.target.playVideo();
+    }
+  };
+
   const onPlayerEnd = () => {
     playNextAudio();
+    if (player) {
+      player.playVideo();
+    }
+  };
+
+  const handlePlayButtonClick = () => {
+    if (player) {
+      setTimeout(() => {
+        player.playVideo();
+      }, 1000);
+    }
   };
 
   useEffect(() => {
@@ -33,14 +52,24 @@ function Playlist() {
           },
         });
         setPlaylistItems(data.items);
-        console.log(data);
       } catch (error) {
         console.error("API 호출 중 오류 발생:", error);
       }
     };
 
     fetchPlaylistItems();
-  }, []);
+  }, [apiRequest]);
+
+  useEffect(() => {
+    if (player) {
+      player.addEventListener("onStateChange", (event) => {
+        if (event.data === 0) {
+          // 0 means video has ended
+          playNextAudio();
+        }
+      });
+    }
+  }, [player, playlistItems]);
 
   return (
     <Container>
@@ -56,21 +85,21 @@ function Playlist() {
                 height: "200px",
                 playerVars: { autoplay: 1 },
               }}
+              onReady={onPlayerReady}
               onEnd={onPlayerEnd}
             />
           </YouTubeWrapper>
           <p>{playlistItems[currentAudioIndex]?.snippet.title}</p>
-          {/* <button onClick={playNextAudio}>Next</button> */}
+          {playlistItems.map((item, index) => (
+            <Playlists
+              onClick={() => setCurrentAudioIndex(index)}
+              imgSrc={item.snippet.thumbnails.default.url}
+              key={index}
+              title={item.snippet.title}
+            />
+          ))}
         </>
       )}
-      {playlistItems.map((item, index) => (
-        <Playlists
-          onClick={() => setCurrentAudioIndex(index)}
-          imgSrc={item.snippet.thumbnails.default.url}
-          key={index}
-          title={item.snippet.title}
-        />
-      ))}
     </Container>
   );
 }
