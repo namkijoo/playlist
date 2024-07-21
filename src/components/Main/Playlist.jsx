@@ -29,7 +29,7 @@ function Playlist() {
     if (player) {
       setTimeout(() => {
         player.playVideo();
-      }, 1000);
+      }, 3000);
     }
   };
 
