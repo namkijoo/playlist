@@ -17,7 +17,9 @@ function Playlist() {
   };
 
   const onPlayerEnd = () => {
-    playNextAudio();
+    setTimeout(() => {
+      playNextAudio();
+    }, 1000);
   };
 
   useEffect(() => {
