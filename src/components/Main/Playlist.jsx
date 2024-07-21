@@ -44,6 +44,11 @@ function Playlist() {
     fetchPlaylistItems();
   }, []);
 
+  const onPlayerReady = (event) => {
+    const player = event.target;
+
+    player.playVideo();
+  };
   return (
     <Container>
       {playlistItems.length > 0 && (
@@ -59,6 +64,7 @@ function Playlist() {
                 playerVars: { autoplay: 1 },
               }}
               onEnd={onPlayerEnd}
+              onReady={onPlayerReady}
             />
           </YouTubeWrapper>
           <p>{playlistItems[currentAudioIndex]?.snippet.title}</p>
