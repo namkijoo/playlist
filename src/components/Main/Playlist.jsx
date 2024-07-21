@@ -27,12 +27,6 @@ function Playlist() {
   const onPlayerEnd = () => {
     playNextAudio();
     if (player) {
-      player.playVideo();
-    }
-  };
-
-  const handlePlayButtonClick = () => {
-    if (player) {
       setTimeout(() => {
         player.playVideo();
       }, 1000);

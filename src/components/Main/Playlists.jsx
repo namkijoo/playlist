@@ -22,10 +22,10 @@ const Container = styled.div`
   width: 100%;
   max-width: 600px;
   height: 70px;
-  background-color: black;
+  background-color: #262525;
   padding: 10px;
   > button {
-    background-color: black;
+    background-color: #262525;
     color: white;
     border: none;
   }
