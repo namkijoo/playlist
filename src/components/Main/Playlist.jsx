@@ -58,8 +58,10 @@ function Playlist() {
     if (player) {
       player.addEventListener("onStateChange", (event) => {
         if (event.data === 0) {
-          // 0 means video has ended
           playNextAudio();
+          setTimeout(() => {
+            player.playVideo();
+          }, 3000);
         }
       });
     }
