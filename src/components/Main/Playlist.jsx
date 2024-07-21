@@ -47,7 +47,9 @@ function Playlist() {
   const onPlayerReady = (event) => {
     const player = event.target;
 
-    player.playVideo();
+    setTimeout(() => {
+      player.playVideo();
+    }, 4000);
   };
   return (
     <Container>
@@ -89,6 +91,7 @@ const Container = styled.div`
     font-weight: bold;
     font-size: 15px;
     padding: 10px;
+    margin-bottom: 30px;
   }
 `;
 
