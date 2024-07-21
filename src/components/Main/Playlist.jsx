@@ -86,19 +86,20 @@ function Playlist() {
 }
 
 const Container = styled.div`
+  background: linear-gradient(45deg, #dbdbdd, #0e0f21);
   > p {
     color: aliceblue;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 13px;
     padding: 10px;
     margin-bottom: 30px;
   }
 `;
 
 const YouTubeWrapper = styled.div`
+  padding-top: 20px;
   width: 80%;
   margin: 0 auto;
-  margin-top: 20px;
 `;
 
 export default Playlist;
