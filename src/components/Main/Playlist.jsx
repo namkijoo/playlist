@@ -9,7 +9,7 @@ import turnTable from "../../assets/turnTable.png";
 function Playlist() {
   const [playlistItems, setPlaylistItems] = useState([]);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
@@ -157,6 +157,15 @@ const scrollText = keyframes`
   }
 `;
 
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
 const TurnTableWrapper = styled.div`
   width: 80%;
   padding: 20px;
@@ -167,6 +176,7 @@ const TurnTableWrapper = styled.div`
     width: 250px;
     height: 250px;
     margin: 10px;
+    animation: ${rotate} 5s linear infinite;
   }
   > p {
     white-space: nowrap;
