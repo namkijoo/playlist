@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "styled-components";
-import Login from "./pages/Login";
-import Main from "./pages/Main";
+import Playlist from "./components/Main/Playlist";
+import Layout from "./style/Layout";
 
 const theme = {
   colors: {
@@ -11,18 +11,19 @@ const theme = {
   },
 };
 
-const routeList = [
-  {
-    path: "/login",
-    element: <Login />,
-  },
+const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Playlist />,
+      },
+    ],
   },
-];
+]);
 
-const router = createBrowserRouter(routeList);
 const queryClient = new QueryClient();
 
 function App() {

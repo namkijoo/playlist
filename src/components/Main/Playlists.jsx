@@ -1,51 +1,65 @@
 import styled from "styled-components";
-import { FaTrash } from "react-icons/fa";
 
 function Playlists({ imgSrc, title, onClick }) {
   return (
     <Container onClick={onClick}>
       <Wrapper>
-        <img src={imgSrc}></img>
-        <p>{title}</p>
+        <Thumbnail src={imgSrc} alt={title} />
+        <Circle2 />
+        <Circle1 />
       </Wrapper>
-      <button type="button">
-        <FaTrash />
-      </button>
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 600px;
-  height: 70px;
-  background-color: #262525;
-  padding: 10px;
-  > button {
-    background-color: #262525;
-    color: white;
-    border: none;
-  }
+  margin: 5px;
 `;
 
 const Wrapper = styled.div`
-  color: aliceblue;
-  display: flex;
-  height: 100%;
-  width: 90%;
-  > img {
-    margin-right: 10px;
-  }
-  > p {
-    margin-top: 5px;
-    word-break: break-all;
-    overflow: auto;
-    font-size: 10px;
-    font-weight: bold;
-  }
+  border-radius: 100%;
+  width: 70px;
+  height: 70px;
+  position: relative;
 `;
 
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  margin-right: 10px;
+  border-radius: 100%;
+`;
+
+const Title = styled.p`
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const Circle1 = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+`;
+
+const Circle2 = styled.div`
+  width: 2px;
+  height: 2px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+`;
 export default Playlists;
