@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { GoHome } from "react-icons/go";
 import { IoAlbumsOutline } from "react-icons/io5";
@@ -18,7 +18,7 @@ const FooterContainer = styled.div`
 const FooterButton = styled.button`
   background: none;
   border: none;
-  color: black;
+  color: ${({ isActive }) => (isActive ? "#08379c" : "black")};
   font-size: 28px;
   cursor: pointer;
   &:hover {
@@ -28,16 +28,26 @@ const FooterButton = styled.button`
 
 const Navigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <FooterContainer>
-      <FooterButton onClick={() => navigate("/")}>
+      <FooterButton
+        onClick={() => navigate("/")}
+        isActive={location.pathname === "/"}
+      >
         <GoHome />
       </FooterButton>
-      <FooterButton onClick={() => navigate("/list")}>
+      <FooterButton
+        onClick={() => navigate("/list")}
+        isActive={location.pathname === "/list"}
+      >
         <IoAlbumsOutline />
       </FooterButton>
-      <FooterButton onClick={() => navigate("/login")}>
+      <FooterButton
+        onClick={() => navigate("/login")}
+        isActive={location.pathname === "/login"}
+      >
         <CiUser />
       </FooterButton>
     </FooterContainer>

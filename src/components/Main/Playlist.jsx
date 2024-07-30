@@ -65,6 +65,7 @@ function Playlist() {
           part: "snippet",
           playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
+          maxResults: 50,
         },
       });
       setPlaylistItems(data.items);
@@ -95,6 +96,7 @@ function Playlist() {
             imgSrc={item.snippet.thumbnails.default.url}
             key={index}
             title={item.snippet.title}
+            isActive={index === currentAudioIndex}
           />
         ))}
       </PlaylistsWrapper>
@@ -191,6 +193,7 @@ const TurnTableWrapper = styled.div`
 `;
 
 const PlaylistsWrapper = styled.div`
+  width: 100%;
   display: flex;
   overflow-x: scroll;
   scroll-behavior: smooth;

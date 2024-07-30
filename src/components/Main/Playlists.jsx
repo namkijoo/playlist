@@ -1,42 +1,50 @@
+import { useState } from "react";
 import styled from "styled-components";
 
-function Playlists({ imgSrc, title, onClick }) {
+function Playlists({ imgSrc, title, onClick, isActive }) {
+  const [timer, setTimer] = useState(null);
+
+  const handleTouchStart = () => {
+    // 3초 후에 알림을 표시하도록 타이머 설정
+    const newTimer = setTimeout(() => {
+      window.confirm("이미지를 삭제하시겠습니까?");
+    }, 2000);
+    setTimer(newTimer);
+  };
+
+  const handleTouchEnd = () => {
+    // 터치가 끝나면 타이머를 취소
+    clearTimeout(timer);
+    setTimer(null);
+  };
   return (
-    <Container onClick={onClick}>
-      <Wrapper>
-        <Thumbnail src={imgSrc} alt={title} />
-        <Circle2 />
-        <Circle1 />
-      </Wrapper>
+    <Container
+      onClick={onClick}
+      isActive={isActive}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <Thumbnail src={imgSrc} alt={title} />
+      <Circle2 />
+      <Circle1 />
     </Container>
   );
 }
 
 const Container = styled.div`
-  margin: 5px;
-`;
-
-const Wrapper = styled.div`
+  margin: auto 5px;
+  flex: 0 0 auto;
   border-radius: 100%;
-  width: 70px;
-  height: 70px;
+  border: 3px solid #3b5998;
+  width: ${({ isActive }) => (isActive ? "90px" : "70px")};
+  height: ${({ isActive }) => (isActive ? "90px" : "70px")};
   position: relative;
 `;
 
 const Thumbnail = styled.img`
   width: 100%;
   height: 100%;
-  margin-right: 10px;
   border-radius: 100%;
-`;
-
-const Title = styled.p`
-  margin: 0;
-  font-size: 14px;
-  font-weight: bold;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const Circle1 = styled.div`
@@ -48,18 +56,18 @@ const Circle1 = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 2;
 `;
 
 const Circle2 = styled.div`
-  width: 2px;
-  height: 2px;
-  background-color: black;
+  width: 25px;
+  height: 25px;
+  background-color: lightgray;
   border-radius: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 1;
 `;
 export default Playlists;
