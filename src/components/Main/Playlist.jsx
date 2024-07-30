@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import YouTube from "react-youtube";
 import Playlists from "./Playlists";
 import { FaChevronLeft, FaChevronRight, FaPause, FaPlay } from "react-icons/fa";
+import { LiaExchangeAltSolid } from "react-icons/lia";
 import turnTable from "../../assets/turnTable.png";
 
 function Playlist() {
@@ -11,6 +12,7 @@ function Playlist() {
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [youtubeVisible, setYoutubeVisible] = useState(false);
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
   const { apiRequest } = useApiRequest();
@@ -56,6 +58,9 @@ function Playlist() {
     }
   };
 
+  const visibleChange = () => {
+    setYoutubeVisible(!youtubeVisible);
+  };
   const fetchPlaylistItems = async () => {
     try {
       const data = await apiRequest({
@@ -100,28 +105,30 @@ function Playlist() {
           />
         ))}
       </PlaylistsWrapper>
-
+      <MenuWrapper>
+        <LiaExchangeAltSolid onClick={visibleChange} />
+      </MenuWrapper>
       {playlistItems.length > 0 && (
         <>
           <TurnTableWrapper>
-            <img src={turnTable} />
+            <YouTubeWrapper isVisible={youtubeVisible}>
+              <YouTube
+                videoId={
+                  playlistItems[currentAudioIndex].snippet.resourceId.videoId
+                }
+                opts={{
+                  width: "100%",
+                  height: "200px",
+                  playerVars: { autoplay: 1 },
+                }}
+                onReady={onPlayerReady}
+                onEnd={onPlayerEnd}
+              />
+            </YouTubeWrapper>
+            {!youtubeVisible && <img src={turnTable} />}
             <p>{playlistItems[currentAudioIndex]?.snippet.title}</p>
             <span>NAMKIJOO</span>
           </TurnTableWrapper>
-          <YouTubeWrapper>
-            <YouTube
-              videoId={
-                playlistItems[currentAudioIndex].snippet.resourceId.videoId
-              }
-              opts={{
-                width: "100%",
-                height: "200px",
-                playerVars: { autoplay: 1 },
-              }}
-              onReady={onPlayerReady}
-              onEnd={onPlayerEnd}
-            />
-          </YouTubeWrapper>
         </>
       )}
       <ButtonWrapper>
@@ -149,6 +156,17 @@ const Container = styled.div`
     font-size: 13px;
     padding: 10px;
   }
+`;
+
+const MenuWrapper = styled.div`
+  width: 80%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  margin-top: 20px;
+  justify-content: flex-end;
+  font-size: 25px;
 `;
 const scrollText = keyframes`
   0% {
@@ -179,6 +197,7 @@ const TurnTableWrapper = styled.div`
     height: 250px;
     margin: 10px;
     animation: ${rotate} 5s linear infinite;
+    display: ${({ isVisible }) => (isVisible ? "hidden" : "visible")};
   }
   > p {
     white-space: nowrap;
@@ -201,10 +220,10 @@ const PlaylistsWrapper = styled.div`
 `;
 
 const YouTubeWrapper = styled.div`
-  padding-top: 20px;
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 20px auto;
   display: none;
+  display: ${({ isVisible }) => (isVisible ? "block" : "none")};
 `;
 
 const ButtonWrapper = styled.div`
