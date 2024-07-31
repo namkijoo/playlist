@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Playlist from "./components/Main/Playlist";
 import Layout from "./style/Layout";
 import Login from "./pages/Login";
+import Album from "./pages/Album";
 
 const theme = {
   colors: {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/album",
+        element: <Album />,
       },
     ],
   },

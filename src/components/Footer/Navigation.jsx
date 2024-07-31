@@ -40,8 +40,8 @@ const Navigation = () => {
         <GoHome />
       </FooterButton>
       <FooterButton
-        onClick={() => navigate("/list")}
-        isActive={location.pathname === "/list"}
+        onClick={() => navigate("/album")}
+        isActive={location.pathname === "/album"}
       >
         <IoAlbumsOutline />
       </FooterButton>
