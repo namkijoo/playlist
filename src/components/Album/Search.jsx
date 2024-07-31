@@ -33,6 +33,8 @@ function Search() {
     setSearchTerm(e.target.value);
   };
   const addToYouTubePlaylist = (videoId) => {
+    console.log(videoId);
+    alert(videoId);
     const requestBody = {
       snippet: {
         playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
@@ -58,6 +60,7 @@ function Search() {
         }
       )
       .then((response) => {
+        alert("추가에 성공했습니다");
         console.log("Video added to playlist:", response.data);
       })
       .catch((error) => {
@@ -90,7 +93,9 @@ function Search() {
               />
               <PlusBtn>
                 <div>{item.snippet.title}</div>
-                <CiCirclePlus onClick={addToYouTubePlaylist(item.id.videoId)} />
+                <CiCirclePlus
+                  onClick={() => addToYouTubePlaylist(item.id.videoId)}
+                />
               </PlusBtn>
             </YoutubePlayer>
           ))}
