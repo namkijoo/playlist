@@ -10,7 +10,7 @@ import turnTable from "../../assets/turnTable.png";
 function Playlist() {
   const [playlistItems, setPlaylistItems] = useState([]);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [youtubeVisible, setYoutubeVisible] = useState(false);
   const playerRef = useRef(null);
@@ -28,6 +28,7 @@ function Playlist() {
       playNextAudio();
     }, 1000);
   };
+
   const togglePlayPause = () => {
     if (isPlaying) {
       playerRef.current.pauseVideo();
@@ -40,6 +41,22 @@ function Playlist() {
   const onPlayerReady = (event) => {
     playerRef.current = event.target;
   };
+
+  const onPlayerStateChange = (event) => {
+    const playerState = event.data;
+    switch (playerState) {
+      case 1: // Playing
+        setIsPlaying(true);
+        break;
+      case 2: // Paused
+      case 0: // Ended
+        setIsPlaying(false);
+        break;
+      default:
+        break;
+    }
+  };
+
   const onProgressBarClick = (e) => {
     if (playerRef.current) {
       const rect = e.target.getBoundingClientRect();
@@ -50,6 +67,7 @@ function Playlist() {
       setProgress(newProgress);
     }
   };
+
   const updateProgress = () => {
     if (playerRef.current) {
       const currentTime = playerRef.current.getCurrentTime();
@@ -61,6 +79,7 @@ function Playlist() {
   const visibleChange = () => {
     setYoutubeVisible(!youtubeVisible);
   };
+
   const fetchPlaylistItems = async () => {
     try {
       const data = await apiRequest({
@@ -79,6 +98,7 @@ function Playlist() {
       console.error("API 호출 중 오류 발생:", error);
     }
   };
+
   useEffect(() => {
     fetchPlaylistItems();
   }, []);
@@ -123,6 +143,7 @@ function Playlist() {
                 }}
                 onReady={onPlayerReady}
                 onEnd={onPlayerEnd}
+                onStateChange={onPlayerStateChange}
               />
             </YouTubeWrapper>
             {!youtubeVisible && <img src={turnTable} />}
