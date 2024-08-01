@@ -1,4 +1,4 @@
-import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const login = useGoogleLogin({
