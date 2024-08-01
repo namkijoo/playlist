@@ -1,13 +1,19 @@
 import styled from "styled-components";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiCirclePlus } from "react-icons/ci";
+import { CiCircleMinus } from "react-icons/ci";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import YouTube from "react-youtube";
+import Menu from "./Menu";
+import useApiRequest from "../../api/useApiRequest";
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [tab, setTab] = useState("플레이리스트");
+  const [playlistItems, setPlaylistItems] = useState([]);
+  const { apiRequest } = useApiRequest();
 
   const searchMusic = () => {
     axios
@@ -33,8 +39,6 @@ function Search() {
     setSearchTerm(e.target.value);
   };
   const addToYouTubePlaylist = (videoId) => {
-    console.log(videoId);
-    alert(videoId);
     const requestBody = {
       snippet: {
         playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
@@ -67,39 +71,113 @@ function Search() {
         console.error("Error adding video to playlist:", error);
       });
   };
+  const handleTabChange = (newTab) => {
+    setTab(newTab);
+  };
+
+  const fetchPlaylistItems = async () => {
+    try {
+      const data = await apiRequest({
+        method: "GET",
+        url: "https://www.googleapis.com/youtube/v3/playlistItems",
+        params: {
+          part: "snippet",
+          playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
+          key: process.env.REACT_APP_YOUTUBE_API_KEY,
+          maxResults: 50,
+        },
+      });
+      setPlaylistItems(data.items);
+      console.log(data);
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+    }
+  };
+  const removeFromYouTubePlaylist = (playlistItemId) => {
+    axios
+      .delete(
+        `https://www.googleapis.com/youtube/v3/playlistItems?id=${playlistItemId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((response) => {
+        alert("삭제에 성공했습니다");
+        console.log("Video removed from playlist:", response.data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error removing video from playlist:", error);
+      });
+  };
+  useEffect(() => {
+    fetchPlaylistItems();
+  }, []);
   return (
     <Container>
-      <SearchWrapper>
-        <Box1
-          placeholder="search"
-          value={searchTerm}
-          onChange={onChangeSearch}
-        />
-        <Box2 onClick={searchMusic}>
-          <IoSearchSharp />
-        </Box2>
-      </SearchWrapper>
-      <YoutubeWrapper>
-        {searchResults &&
-          searchResults.map((item, key) => (
-            <YoutubePlayer key={key}>
-              <YouTube
-                videoId={item.id.videoId}
-                opts={{
-                  width: "100%",
-                  height: "200px",
-                  playerVars: { autoplay: 0 },
-                }}
-              />
-              <PlusBtn>
-                <div>{item.snippet.title}</div>
-                <CiCirclePlus
-                  onClick={() => addToYouTubePlaylist(item.id.videoId)}
-                />
-              </PlusBtn>
-            </YoutubePlayer>
-          ))}
-      </YoutubeWrapper>
+      <Menu currentTab={tab} onTabChange={handleTabChange} />
+      {tab === "추가" && (
+        <>
+          <SearchWrapper>
+            <Box1
+              placeholder="search"
+              value={searchTerm}
+              onChange={onChangeSearch}
+            />
+            <Box2 onClick={searchMusic}>
+              <IoSearchSharp />
+            </Box2>
+          </SearchWrapper>
+          <YoutubeWrapper>
+            {searchResults &&
+              searchResults.map((item, key) => (
+                <YoutubePlayer key={key}>
+                  <YouTube
+                    videoId={item.id.videoId}
+                    opts={{
+                      width: "100%",
+                      height: "200px",
+                      playerVars: { autoplay: 0 },
+                    }}
+                  />
+                  <PlusBtn>
+                    <div>{item.snippet.title}</div>
+                    <CiCirclePlus
+                      onClick={() => addToYouTubePlaylist(item.id.videoId)}
+                    />
+                  </PlusBtn>
+                </YoutubePlayer>
+              ))}
+          </YoutubeWrapper>
+        </>
+      )}
+      {tab === "플레이리스트" && (
+        <>
+          <YoutubeWrapper>
+            {playlistItems &&
+              playlistItems.map((item, key) => (
+                <YoutubePlayer key={key}>
+                  <YouTube
+                    videoId={playlistItems[key].snippet.resourceId.videoId}
+                    opts={{
+                      width: "100%",
+                      height: "200px",
+                      playerVars: { autoplay: 0 },
+                    }}
+                  />
+                  <PlusBtn>
+                    <div>{item.snippet.title}</div>
+                    <CiCircleMinus
+                      onClick={() => removeFromYouTubePlaylist(item.id)}
+                    />
+                  </PlusBtn>
+                </YoutubePlayer>
+              ))}
+          </YoutubeWrapper>
+        </>
+      )}
     </Container>
   );
 }

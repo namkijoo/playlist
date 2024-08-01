@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import Menu from "../components/Album/Menu";
 import Search from "../components/Album/Search";
 
 function Album() {
   return (
     <Container>
-      <Menu />
       <Search />
     </Container>
   );
