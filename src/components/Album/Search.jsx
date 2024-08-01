@@ -112,6 +112,11 @@ function Search() {
         console.error("Error removing video from playlist:", error);
       });
   };
+  const activeEnter = (e) => {
+    if (e.key === "Enter") {
+      searchMusic();
+    }
+  };
   useEffect(() => {
     fetchPlaylistItems();
   }, []);
@@ -125,6 +130,7 @@ function Search() {
               placeholder="search"
               value={searchTerm}
               onChange={onChangeSearch}
+              onKeyDown={(e) => activeEnter(e)}
             />
             <Box2 onClick={searchMusic}>
               <IoSearchSharp />
