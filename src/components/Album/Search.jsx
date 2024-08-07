@@ -41,7 +41,7 @@ function Search() {
   const addToYouTubePlaylist = (videoId) => {
     const requestBody = {
       snippet: {
-        playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
+        playlistId: "PLgfxU3idNsAspHGxg1bfAKm9UmK6Kz17D",
         resourceId: {
           kind: "youtube#video",
           videoId: videoId,
@@ -82,7 +82,7 @@ function Search() {
         url: "https://www.googleapis.com/youtube/v3/playlistItems",
         params: {
           part: "snippet",
-          playlistId: "PLgfxU3idNsAsIiEfqmcXLhis1vHGu5bTB",
+          playlistId: "PLgfxU3idNsAspHGxg1bfAKm9UmK6Kz17D",
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
           maxResults: 50,
         },
