@@ -15,6 +15,7 @@ const FooterContainer = styled.div`
   justify-content: space-around;
   padding: 10px 0;
   background-color: white;
+  margin-bottom: 20px;
 `;
 
 const FooterButton = styled.button`
